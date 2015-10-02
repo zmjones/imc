@@ -26,14 +26,13 @@ fit <- train(lrn, multiclass.task)
 rdesc <- makeResampleDesc("CV", iters = 10L)
 pred <- resample(lrn, multiclass.task, rdesc, mmce)
 ps <- makeParamSet(
-  makeDiscreteParam("C", values = 2^(-2:2)),
-  makeDiscreteParam("sigma", values = 2^(-2:2))
+  makeNumericParam("C", lower = -12, upper = 12, trafo = function(x) 2^x),
+  makeNumericParam("sigma", lower = -12, upper = 12, trafo = function(x) 2^x)
 )
-ctrl <- makeTuneControlGrid()
+ctrl <- makeTuneControlGrid(resolution = 3L)
 res <- tuneParams(lrn, task = multiclass.task, resampling = rdesc, par.set = ps, control = ctrl)
 lrn <- setHyperPars(lrn, par.vals = res$x)
 fit <- train(lrn, multiclass.task)
-pred <- resample(lrn, multiclass.task, rdesc, mmce)
 
 fv <- generateFilterValuesData(multiclass.task, "cforest.importance", mtry = 3)
 plotFilterValues(fv)
@@ -69,7 +68,6 @@ pred <- resample(lrn, regr.task, rdesc, rmse)
 res <- tuneParams(lrn, task = regr.task, resampling = rdesc, par.set = ps, control = ctrl)
 lrn <- setHyperPars(lrn, par.vals = res$x)
 fit <- train(lrn, regr.task)
-pred <- resample(lrn, regr.task, rdesc, rmse)
 
 fv <- generateFilterValuesData(regr.task, "cforest.importance")
 plotFilterValues(fv)

@@ -21,7 +21,7 @@ sp2 <- fit_cart@tree$left$psplit$splitpoint
 p <- ggplot(dme, aes(ideology, age, shape = vote))
 p <- p + theme_bw() + xlim(min(ideology), max(ideology)) + ggtitle("Original Data")
 p <- p + geom_point(size = 5) + scale_shape_manual(values=c("D", "R"))
-ggsave(paste0(dir_prefix, "figures/o.png"), p, width = 20, height = 12, units = "cm")
+ggsave(paste0(dir_prefix, "original.png"), p, width = 20, height = 12, units = "cm")
 
 ## First Partition
 dme2 <- dme
@@ -36,7 +36,7 @@ p <- p + theme_bw() + xlim(min(ideology), max(ideology))
 p <- p + ggtitle("First Partition")
 p <- p + geom_vline(aes(xintercept = sp1))
 p <- p + geom_point(size = 5) + scale_shape_manual(values=c("D", "R"))
-ggsave(paste0(dir_prefix, "figures/p1.png"), p, width = 20, height = 12, units = "cm")
+ggsave(paste0(dir_prefix, "p1.png"), p, width = 20, height = 12, units = "cm")
 
 ## Second Partition
 dme3 <- dme
@@ -53,7 +53,7 @@ p <- p + theme_bw() + xlim(min(ideology), max(ideology))
 p <- p + ggtitle("Second Partition")
 p <- p + geom_vline(aes(xintercept = sp1))
 p <- p + geom_point(size = 5) + scale_shape_manual(values = c("D", "R"))
-ggsave(paste0(dir_prefix, "figures/p2.png"), p, width = 20, height = 12, units = "cm")
+ggsave(paste0(dir_prefix, "p2.png"), p, width = 20, height = 12, units = "cm")
 
 png(paste0(dir_prefix, "figures/cart.png"), width = 20, height = 12, units = "cm", res = 300)
 plot(fit_cart, inner_panel = node_inner(fit_cart, pval = FALSE),

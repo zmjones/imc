@@ -4,47 +4,37 @@
 # The Problem(s)
 
  - presumptions
-    - social systems are complex (i.e., not linear, additive, or static)
+    - social systems are complex
     - causal identification is difficult/impossible with many data sources
 	- theory not generally predictively reliable (may be exceptions to this)
 - conclusions
-    - confidence in assumptions (assumed joint distribution, causal structure, etc.) is low
-    - many theoretical guarantees do not apply
+    - confidence in assumptions is low
     - analysis is exploratory/descriptive and/or predictive
-	- ability to discover unexpected patterns is desirable (i.e., data driven discovery)
+	- ability to discover unexpected patterns is desirable
 
-# Data Mining
+# Data Mining I
 
-Not a bad thing.
+Not a bad thing!
 
- - estimation of $f(X)$ under minimal assumptions
- - minimize *expected* prediction error
+ - estimation of $f: X \to Y$ under minimal assumptions
  - adapt to data (within a representation class)
+ - control overadaptation (by minimizing excess risk)
 
-however, $\hat{f}(X)$ is often not (*directly*) interpretable!
+Expected risk (generalization error):
 
-# Supervised Learning (I)
+$$R(f) = \mathbb{E} \left[ L(Y, f(X)) \right]$$
 
-if $(X, Y) \sim \mathbb{P}_{\mathcal{X} \times \mathcal{Y}}$ estimate $f : X \to Y$ using $(\mathbf{x}, \mathbf{y})$
+Learning $f$ does not result in directly interpretable output
 
-rather than specifying in detail what $f$ looks like assume $f$ is approximated by some class of functions $\mathcal{F}$ and find the member of that class closest to $f$ (which may not be in $\mathcal{F}$) according to the risk function
+# Data Mining (II)
 
-$\mathcal{F}$ and find the closest $f^* \in \mathcal{F}$ to $f$ (not necessarily in $\mathcal{F}$) as measured by a risk function, which is the expected cost or loss over $\mathbb{P}_{\mathcal{X} \times \mathcal{Y}}$
-
-$$R(f) = \mathbb{E}_{\mathbb{P}} \left[ L(Y, f(X)) \right]$$
-
-# Supervised Learning (II)
-
- - Consistency for $f$ is hard! (but some algorithms are provably consistent)
- - In general learning theory is (seems) quite difficult
- - Estimation/learning is often heuristic (i.e., not globally optimal) because the problem is higher dimensional (goodbye intuitions!) and not (necessarily) well-behaved (good behavior comes at the cost of assumptions)
+ - statistical theory is hard to come by
+ - estimation/learning is often heuristic (i.e., not globally optimal)
  - Some examples...
 
 # Decision Trees (I)
 
 Idea: approximate $f$ by recursively splitting $\mathbf{y}$ into bins until $\mathbf{y}$ is sufficiently homogenous in said bins: predict by using a constant function of $\mathbf{y}$ in each bin
-
-The result is a regression/classification where on i
 
  - Pros: interpretability, fitting/evaluation speed
  - Cons: overadaptation, variance (sharp boundaries), greedy (some work on global optimality though, see [evtree](https://cran.r-project.org/web/packages/evtree/index.html))
@@ -60,24 +50,21 @@ The result is a regression/classification where on i
 # Ensembles of Decision Trees
 
 **aggregation** (bagging)
- - sampling from $\mathbf{x}$, training on the psuedosamples, and aggregating the predictions reduces the variance of $\hat{f}$ by decreasing the correlation between the predictions made by the trees grown on different psuedosamples
 
 **meta-learning** (boosting)
- - gradient descent in function space $\equiv$ forward stagewise additive modelling (e.g., Buhlmann and Hothorn 2007, ESL 10)
 
 **randomization** (random forests)
-- a further decrease in variance beyond aggregation by randomly sampling the available features at each split
 
 # Random Forests (I)
 
-Nice for exploratory data analysis for:
+Nice for description/EDA for:
 
- - computational reasons (in progress: [edarf](http://github.com/zmjones/edarf))
- - usability for many tasks (i.e., regression, classification, survival, and multivariate combinations thereof)
- - some (studied) methods for interpretation (e.g., Strobl et. al. 2007, 2008, Louppe 2014)
- - low number of tuning/hyperparameters (features available at each node, depth)
+ - computational reasons
+ - usability for many tasks
+ - some (studied) methods for interpretation
+ - low number of tuning/hyperparameters
  - good empirical performance
- - some theory (Brieman 2001, Biau et. al. 2008, Biau 2012, Wager et. al. 2014, etc.)
+ - some theory
 
 # Random Forests (II)
 
@@ -85,7 +72,7 @@ Nice for exploratory data analysis for:
 
 # Supervised Learning for Description/EDA
 
-Since most machine learning methods are designed for prediction their generalization error (i.e., risk) is low (because they are attempting to make the optimal bias/variance tradeoff, see, e.g., Fariss and Jones (2015) or any machine learning textbook)
+Since most machine learning methods are designed for prediction, their generalization error is low (because they are attempting to make the optimal bias/variance tradeoff
 
 Predicting a complex phenomena reliably gives us some basis on which to interpret $\hat{f}$ (though obviously this is not a causal inference)
 
@@ -96,7 +83,7 @@ But what did $\hat{f}$ learn about $f$ by using $X$?
 
 $$X = X_S \cup X_C$$
 
-$S$ we care about and $C$ we do not (at the moment)
+$S$ we care about and $C$ we do not
 
 The marginal distribution summarizes how $\hat{f}$ depends on $X_s$.
 
@@ -141,6 +128,16 @@ $$I_{X^{(i)}_S} = C(\mathbf{x}_{S \pi}^{(i)}, \mathbf{x}_C^{(i)})$$
 
 By using the individual $(i)$ importance rather than the expectation combined with a density estimator, we can estimate the density of the cost function under $\mathbf{x}_{S \pi}$ for different points in the distribution of $Y$ (as estimated from $\mathbf{y}$).
 
+# Implementations
+
+ - mlr: **M**achine **L**earning with **R** (contributor, first via GSoC)
+ - edarf: **E**xploratory **D**ata **A**nalysis using **R**andom **F**orests (my package)
+ - ICEbox: **I**ndividual **C**onditional **E**xpectation plot toolbox (Goldstein et. al. 2015)
+
+On to the demonstration! (`mlr.R` and `edarf.R`)
+
+On my [website](http://zmjones.com/) under "[Talks](http://zmjones.com/cv#Talks)." and at [github.com/zmjones/imc](http://github.com/zmjones/imc)
+
 # Future Work on Interpretation
 
 All of this will be in MLR!
@@ -166,12 +163,3 @@ All of this will be in MLR!
  - Hooker (2004, 2007)
  - Goldstein et. al. (2015)
 
-# Implementations
-
- - mlr: **M**achine **L**earning with **R** (contributor, first via GSoC)
- - edarf: **E**xploratory **D**ata **A**nalysis using **R**andom **F**orests (my package)
- - ICEbox: **I**ndividual **C**onditional **E**xpectation plot toolbox (Goldstein et. al. 2015)
-
-On to the demonstration! (`eda.R`)
-
-On my [website](http://zmjones.com/) under "[Talks](http://zmjones.com/cv#Talks)."
